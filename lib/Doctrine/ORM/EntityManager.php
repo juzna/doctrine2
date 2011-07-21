@@ -27,6 +27,7 @@ use Closure, Exception,
     Doctrine\ORM\Mapping\ClassMetadata,
     Doctrine\ORM\Mapping\ClassMetadataFactory,
     Doctrine\ORM\Query\ResultSetMapping,
+    Doctrine\ORM\Proxy\ProxyFactory,
     Doctrine\ORM\Proxy\ProxyFactoryInterface,
     Doctrine\ORM\Query\FilterCollection;
 
