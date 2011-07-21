@@ -31,7 +31,7 @@ use Doctrine\ORM\EntityManager,
  * @author Giorgio Sironi <piccoloprincipeazzurro@gmail.com>
  * @since 2.0
  */
-class ProxyFactory
+class ProxyFactory implements ProxyFactoryInterface
 {
     /** The EntityManager this factory is bound to. */
     private $_em;
@@ -73,14 +73,6 @@ class ProxyFactory
         $this->_proxyNamespace = $proxyNs;
     }
 
-    /**
-     * Gets a reference proxy instance for the entity of the given type and identified by
-     * the given identifier.
-     *
-     * @param string $className
-     * @param mixed $identifier
-     * @return object
-     */
     public function getProxy($className, $identifier)
     {
         $fqn = ClassUtils::generateProxyClassName($className, $this->_proxyNamespace);
