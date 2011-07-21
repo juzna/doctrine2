@@ -27,7 +27,7 @@ use Closure, Exception,
     Doctrine\ORM\Mapping\ClassMetadata,
     Doctrine\ORM\Mapping\ClassMetadataFactory,
     Doctrine\ORM\Query\ResultSetMapping,
-    Doctrine\ORM\Proxy\ProxyFactory,
+    Doctrine\ORM\Proxy\ProxyFactoryInterface,
     Doctrine\ORM\Query\FilterCollection;
 
 /**
@@ -93,7 +93,7 @@ class EntityManager implements ObjectManager
     /**
      * The proxy factory used to create dynamic proxies.
      *
-     * @var \Doctrine\ORM\Proxy\ProxyFactory
+     * @var \Doctrine\ORM\Proxy\ProxyFactoryInterface
      */
     private $proxyFactory;
 
@@ -743,14 +743,27 @@ class EntityManager implements ObjectManager
     /**
      * Gets the proxy factory used by the EntityManager to create entity proxies.
      *
-     * @return ProxyFactory
+     * @return ProxyFactoryInterface
      */
     public function getProxyFactory()
     {
         return $this->proxyFactory;
     }
 
-    /**
+
+	/**
+	 * Changes the proxy factory used by the EntityManager to create entity proxies.
+	 *
+	 * @param Doctrine\ORM\Proxy\ProxyFactoryInterface $proxy
+	 * @return EntityManager
+	 */
+	public function setProxyFactory(ProxyFactoryInterface $proxy)
+	{
+		$this->proxyFactory = $proxy;
+		return $this;
+	}
+
+	/**
      * Helper method to initialize a lazy loading proxy or persistent collection.
      *
      * This method is a no-op for other objects
