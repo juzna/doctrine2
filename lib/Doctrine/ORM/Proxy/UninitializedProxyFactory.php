@@ -29,29 +29,40 @@ use Doctrine\ORM\EntityManager,
  * 
  * @author Jan Dolecek <juzna.cz@gmail.com>
  */
-class UninitializedProxyFactory implements ProxyFactoryInterface
+class UninitializedProxyFactory implements ProxyFactoryInterface, \Nette\Diagnostics\IBarPanel
 {
     /** The EntityManager this factory is bound to. */
     private $_em;
+	private $_initialized = array();
 
-    /**
-     * Initializes a new instance of the <tt>ProxyFactory</tt> class that is
-     * connected to the given <tt>EntityManager</tt>.
-     *
-     * @param EntityManager $em The EntityManager the new factory works for.
-     */
     protected function __construct(EntityManager $em)
     {
         $this->_em = $em;
     }
 
+	/**
+	 * Create proxy factory and register it as initializer
+	 *
+	 * @param \Doctrine\ORM\EntityManager $em
+	 * @param bool $registerInitializer
+	 * @return UninitializedProxyFactory
+	 */
     public static function create(EntityManager $em, $registerInitializer = true)
     {
         $ret = new static($em);
-        if($registerInitializer) spl_initialize_register(array($ret, '_initialize'));
+        if($registerInitializer) {
+	        spl_initialize_register(array($ret, '_initialize'));
+	        \Nette\Diagnostics\Debugger::$bar->addPanel($ret);
+        }
         return $ret;
     }
 
+	/**
+	 *
+	 * @param string $className
+	 * @param array $identifier
+	 * @return object
+	 */
     public function getProxy($className, $identifier)
     {
         /** @var \Doctrine\ORM\Mapping\ClassMetadata $classMetaData */
@@ -80,7 +91,7 @@ class UninitializedProxyFactory implements ProxyFactoryInterface
     public function _initialize($obj, $propertyName) {
         $className = get_class($obj);
 
-        /** @var \Doctrine\ORM\Mapping\ClassMetadata $classMetaData */
+	    /** @var \Doctrine\ORM\Mapping\ClassMetadata $classMetaData */
         if(!$classMetaData = $this->_em->getClassMetadata($className)) return; // we don't know how to hydrate it
 
         // Create identifier
@@ -91,6 +102,30 @@ class UninitializedProxyFactory implements ProxyFactoryInterface
             $identifier[$fieldName] = $ref->getValue($obj);
         }
 
+	    $this->_initialized[] = array($className, $identifier);
+
         $this->_em->getUnitOfWork()->getEntityPersister($className)->load($identifier, $obj);
     }
+
+	/**
+	 * Renders HTML code for custom tab.
+	 *
+	 * @return string
+	 */
+	function getTab() {
+		return count($this->_initialized) . ' lazy-loads';
+	}
+
+	/**
+	 * Renders HTML code for custom panel.
+	 *
+	 * @return string
+	 */
+	function getPanel() {
+		if(!$this->_initialized) return;
+
+		return '<pre>' . var_export($this->_initialized, true);
+	}
+
+
 }
