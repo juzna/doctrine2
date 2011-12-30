@@ -755,7 +755,7 @@ class EntityManager implements ObjectManager
 	/**
 	 * Changes the proxy factory used by the EntityManager to create entity proxies.
 	 *
-	 * @param Doctrine\ORM\Proxy\ProxyFactoryInterface $proxy
+	 * @param \Doctrine\ORM\Proxy\ProxyFactoryInterface $proxy
 	 * @return EntityManager
 	 */
 	public function setProxyFactory(ProxyFactoryInterface $proxy)
