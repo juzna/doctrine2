@@ -34,11 +34,20 @@ class UninitializedProxyFactory implements ProxyFactoryInterface, \Nette\Diagnos
     /** The EntityManager this factory is bound to. */
     private $_em;
 	private $_initialized = array();
+	private $_partials = array(); // oid -> true
 
     protected function __construct(EntityManager $em)
     {
         $this->_em = $em;
     }
+
+	public function addPartialObject($object) {
+		$this->_partials[spl_object_hash($object)] = true;
+	}
+
+	public function isPartial($object) {
+		return isset($this->_partials[spl_object_hash($object)]);
+	}
 
 	/**
 	 * Create proxy factory and register it as initializer
@@ -93,6 +102,10 @@ class UninitializedProxyFactory implements ProxyFactoryInterface, \Nette\Diagnos
 
 	    /** @var \Doctrine\ORM\Mapping\ClassMetadata $classMetaData */
         if(!$classMetaData = $this->_em->getClassMetadata($className)) return; // we don't know how to hydrate it
+	    if($this->isPartial($obj)) {
+		    trigger_error("Accessed uninitialized property of a partially-loaded object", E_USER_NOTICE);
+		    $classMetaData->reflFields[$propertyName]->setValue(null);
+	    }
 
         // Create identifier
         $identifier = array();

@@ -119,6 +119,11 @@ class ResultSetMapping
     public $isIdentifierColumn = array();
 
     /**
+     * @var bool Contains partial select
+     */
+    public $isPartial = false;
+
+    /**
      * Adds an entity result to this ResultSetMapping.
      *
      * @param string $class The class name of the entity.

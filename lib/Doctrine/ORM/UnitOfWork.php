@@ -2349,6 +2349,12 @@ class UnitOfWork implements PropertyChangedListener
             return $entity;
         }
 
+        // Fill-in with UNINITIALIZED special values
+        if (isset($hints[Query::HINT_PARTIAL_UNINITIALIZED])) {
+            foreach($class->fieldMappings as $field => $fieldMapping) $class->reflFields[$field]->setValue($entity, UNINITIALIZED);
+        }
+
+
         foreach ($data as $field => $value) {
             if (isset($class->fieldMappings[$field])) {
                 $class->reflFields[$field]->setValue($entity, $value);
