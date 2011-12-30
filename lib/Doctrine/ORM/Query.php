@@ -109,6 +109,11 @@ final class Query extends AbstractQuery
     const HINT_LOCK_MODE = 'doctrine.lockMode';
 
     /**
+     * @var string
+     */
+    const HINT_PARTIAL_UNINITIALIZED = 'doctrine.partial.uninitialized';
+
+    /**
      * @var integer $_state   The current state of this query.
      */
     private $_state = self::STATE_CLEAN;

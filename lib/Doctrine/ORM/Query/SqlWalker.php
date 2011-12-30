@@ -1140,6 +1140,7 @@ class SqlWalker implements TreeWalker
                 if ($expr instanceof AST\PartialObjectExpression) {
                     $dqlAlias = $expr->identificationVariable;
                     $partialFieldSet = $expr->partialFieldSet;
+                    $this->_rsm->isPartial = true;
                 } else {
                     $dqlAlias = $expr;
                     $partialFieldSet = array();

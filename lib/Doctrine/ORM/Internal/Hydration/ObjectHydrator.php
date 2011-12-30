@@ -233,8 +233,14 @@ class ObjectHydrator extends AbstractHydrator
         }
 
         $this->_hints['fetchAlias'] = $dqlAlias;
+        if ($this->_rsm->isPartial) $this->_hints[Query::HINT_PARTIAL_UNINITIALIZED] = true;
 
         $entity = $this->_uow->createEntity($className, $data, $this->_hints);
+
+        if ($this->_rsm->isPartial && ($pf = $this->_em->getProxyFactory()) instanceof \Doctrine\ORM\Proxy\UninitializedProxyFactory) {
+            /** @var \Doctrine\ORM\Proxy\UninitializedProxyFactory $pf */
+            $pf->addPartialObject($entity);
+        }
 
         //TODO: These should be invoked later, after hydration, because associations may not yet be loaded here.
         if (isset($this->_ce[$className]->lifecycleCallbacks[Events::postLoad])) {
