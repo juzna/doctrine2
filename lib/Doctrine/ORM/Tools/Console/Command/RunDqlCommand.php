@@ -78,6 +78,7 @@ EOT
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
+	    /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->getHelper('em')->getEntityManager();
 
         if (($dql = $input->getArgument('dql')) === null) {

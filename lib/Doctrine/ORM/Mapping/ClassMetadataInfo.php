@@ -505,7 +505,7 @@ class ClassMetadataInfo implements ClassMetadata
     /**
      * The ReflectionProperty instances of the mapped class.
      *
-     * @var array
+     * @var \ReflectionProperty[]
      */
     public $reflFields = array();
 
@@ -544,7 +544,7 @@ class ClassMetadataInfo implements ClassMetadata
      * Gets a ReflectionProperty for a specific field of the mapped class.
      *
      * @param string $name
-     * @return ReflectionProperty
+     * @return \ReflectionProperty
      */
     public function getReflectionProperty($name)
     {
@@ -554,8 +554,8 @@ class ClassMetadataInfo implements ClassMetadata
     /**
      * Gets the ReflectionProperty for the single identifier field.
      *
-     * @return ReflectionProperty
-     * @throws BadMethodCallException If the class has a composite identifier.
+     * @return \ReflectionProperty
+     * @throws \BadMethodCallException If the class has a composite identifier.
      */
     public function getSingleIdReflectionProperty()
     {
