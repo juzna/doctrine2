@@ -534,6 +534,7 @@ class AnnotationDriver implements Driver
 
             foreach ($iterator as $file) {
                 $sourceFile = realpath($file[0]);
+	            if(!preg_match('/\bclass\s+/', file_get_contents($sourceFile))) continue;
 
                 require_once $sourceFile;
 
