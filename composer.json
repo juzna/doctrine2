@@ -15,9 +15,15 @@
         "php": ">=5.3.2",
         "ext-pdo": "*",
         "doctrine/common": ">=2.2.0,<2.2.99",
-        "doctrine/dbal": ">=2.2.1,<2.2.99"
+        "doctrine/dbal": "dev-juznovo"
     },
     "autoload": {
         "psr-0": { "Doctrine\\ORM": "lib/" }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git://github.com/juzna/doctrine-dbal.git"
+        }
+    ]
 }
